@@ -28,12 +28,13 @@ const DreamVacation = () => {
   }, []);
 
   // Images to associate with categories (you can adjust the logic to dynamically assign images based on category)
-  const categoryImages = [
-    { name: "Australia", image: Image1 },
-    { name: "Japan", image: Image2 },
-    { name: "New Zealand", image: Image3 },
-    { name: "Greece", image: Image4 },
-  ];
+const categoryImages = [
+  { name: "Luxury Hotels", image: Image1 },
+  { name: "Business Hotels", image: Image2 },
+  { name: "Resort Hotels", image: Image3 },
+  { name: "Boutique Hotels", image: Image4 },
+];
+
 
   // Function to find the image for a category
   const getImageForCategory = (categoryName) => {

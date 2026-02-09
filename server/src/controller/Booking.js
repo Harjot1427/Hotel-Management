@@ -36,7 +36,15 @@ export const searchBookings = async (req, res) => {
   }
 };
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const getStripe = () => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error("STRIPE_SECRET_KEY is missing");
+  }
+
+  return new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: "2023-10-16",
+  });
+};
 export const createPaymentIntent = async (req, res) => {
   try {
     const { amount, currency, description, customerName, customerAddress } =

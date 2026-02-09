@@ -11,8 +11,10 @@ const Hotels = () => {
   const getAllPosts = async () => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/api/post/get-all-post`
-      );
+  "http://localhost:3000/api/post/get-all-post"
+);
+console.log("POSTS:", res.data.posts);
+
       setPosts(res.data.posts);
     } catch (error) {
       console.error(error);
@@ -26,20 +28,25 @@ const Hotels = () => {
   // Image rotation logic
   const [imageIndexes, setImageIndexes] = useState({});
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setImageIndexes((prevIndexes) => {
-        const newIndexes = { ...prevIndexes };
-        posts.forEach((post) => {
-          const currentIndex = newIndexes[post._id] || 0;
-          newIndexes[post._id] = (currentIndex + 1) % post.images.length;
-        });
-        return newIndexes;
-      });
-    }, 3000);
+ useEffect(() => {
+  const interval = setInterval(() => {
+    setImageIndexes((prevIndexes) => {
+      const newIndexes = { ...prevIndexes };
 
-    return () => clearInterval(interval);
-  }, [posts]);
+      posts.forEach((post) => {
+        if (!post.images || post.images.length === 0) return;
+
+        const currentIndex = newIndexes[post._id] || 0;
+        newIndexes[post._id] =
+          (currentIndex + 1) % post.images.length;
+      });
+
+      return newIndexes;
+    });
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, [posts]);
 
   const responsive = {
     superLargeDesktop: {
@@ -72,11 +79,14 @@ const Hotels = () => {
             key={hotel._id}
             className="bg-white rounded-lg overflow-hidden mx-auto w-64"
           >
-            <img
-              src={hotel.images[imageIndexes[hotel._id] || 0]}
-              alt={hotel.title}
-              className="w-full h-64 object-cover"
-            />
+           {hotel.images?.length > 0 && (
+  <img
+    src={hotel.images[imageIndexes[hotel._id] || 0]}
+    alt={hotel.title}
+    className="w-full h-64 object-cover"
+  />
+)}
+
             <div className="p-4">
               <Link
                 to={`product/${hotel.slug}`}
